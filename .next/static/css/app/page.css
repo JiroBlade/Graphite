@@ -1,0 +1,145 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[5].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[5].oneOf[7].use[3]!./app/css/titlebar.module.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************/
+#titlebar_titlebar__NGY3L {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    height: 30px; line-height: 30px;
+    top: 0; left: 0; right: 0;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    background-color: #3b3b3b;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    font-size: 12px;
+}
+
+#titlebar_titlebar__NGY3L > div {
+    display: inline-flex;
+}
+
+#titlebar_titlebar__NGY3L button {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+#titlebar_titlebar__NGY3L button:hover {
+    background-color: gray;
+}
+
+#titlebar_windowControl__bWf1_ > button {
+    width: 50px;
+}
+/*!*******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[5].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[5].oneOf[7].use[3]!./app/css/dialog.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************/
+#dialog_dialogRoot__cfkDM {
+    position: fixed;
+    width: 100%; height: 100%;
+    left: 0; top: 30px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+}
+.dialog_dialogWindow___5tBY {
+    margin: auto;
+    background-color: #292827;
+    border: 1px solid gray;
+    width: 400px; height: 400px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.dialog_dialogHeader__Yka3t {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+}
+
+.dialog_dialogTitle__v9Veh {
+    padding: 12px;
+}
+
+.dialog_dialogContent__u0TFK {
+    padding: 10px;
+}
+
+button.dialog_dialogClose__bUGha {
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    color: white;
+    float: right;
+}
+/*!******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[5].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[5].oneOf[7].use[3]!./app/css/style.module.css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************/
+#style_sidebar___kROF {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 180px; height: 100vh;
+    border-right: 1px solid gray;
+    background-color: #27272a;
+    color: white;
+}
+
+#style_tabList__T303Z {
+    display: flex;
+    flex-direction: column;
+}
+
+button#style_newPage__EcaWZ {
+    background-color: transparent;
+    border: none;
+    background-color: #264765;
+    line-height: 25px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    color: white;
+}
+button#style_newPage__EcaWZ:hover {
+    background-color: #263c52;
+}
+
+button.style_tabLink__naeIP {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    margin: 0 10px 3px 10px;
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    color: white;
+}
+
+button.style_tabLink__naeIP:hover {
+    background-color: #263c52;
+    border-radius: 5px;
+}
+
+button.style_tabLink__naeIP[data-active='true'] {
+    font-weight: bold;
+    background-color: #264765;
+    border-radius: 5px;
+}
+
+.style_tabsContent__KjRh8 {
+    margin-left: 180px;
+    padding: 30px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input.style_title___xcy8 {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 25px;
+    outline: none;
+    border-bottom: 1px solid gray;
+}

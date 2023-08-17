@@ -1,0 +1,30 @@
+#titlebar {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    height: 30px; line-height: 30px;
+    top: 0; left: 0; right: 0;
+    user-select: none;
+    background-color: #3b3b3b;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    font-size: 12px;
+}
+
+#titlebar > div {
+    display: inline-flex;
+}
+
+#titlebar button {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+#titlebar button:hover {
+    background-color: gray;
+}
+
+#windowControl > button {
+    width: 50px;
+}

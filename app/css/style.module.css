@@ -1,0 +1,66 @@
+#sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 180px; height: 100vh;
+    border-right: 1px solid gray;
+    background-color: #27272a;
+    color: white;
+}
+
+#tabList {
+    display: flex;
+    flex-direction: column;
+}
+
+button#newPage {
+    background-color: transparent;
+    border: none;
+    background-color: #264765;
+    line-height: 25px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    color: white;
+}
+button#newPage:hover {
+    background-color: #263c52;
+}
+
+button.tabLink {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    margin: 0 10px 3px 10px;
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    color: white;
+}
+
+button.tabLink:hover {
+    background-color: #263c52;
+    border-radius: 5px;
+}
+
+button.tabLink[data-active='true'] {
+    font-weight: bold;
+    background-color: #264765;
+    border-radius: 5px;
+}
+
+.tabsContent {
+    margin-left: 180px;
+    padding: 30px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input.title {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 25px;
+    outline: none;
+    border-bottom: 1px solid gray;
+}
