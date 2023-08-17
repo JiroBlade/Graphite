@@ -51,27 +51,28 @@ export default function Home() {
 
     async function openFile() {
         const file = await Tauri.invoke('open_file')
+        console.log(file)
         setFilepath(file[0])
         setData({
             tabList: file[1].map((item, i) =>
                 <Tabs.Trigger key={i} className={styles.tabLink} ref={ed => tabsRef.current[i] = ed} value={i} active={false} onClick={e => openTab(e)}>{item.title}</Tabs.Trigger>),
             editorList: file[1].map((item, i) =>
-                <Tabs.Content key={i} className={styles.tabsContent} ref={ed => tabsContentRef.current[i] = ed}><Editor title={item.title} ref={ed => editorsRef.current[i] = ed}>{item.paragraph}</Editor></Tabs.Content>)
+                <Tabs.Content key={i} className={styles.tabsContent} ref={ed => tabsContentRef.current[i] = ed}><Editor title={item.title} value={i} ref={ed => editorsRef.current[i] = ed}>{item.paragraph}</Editor></Tabs.Content>)
         })
         
     }
 
     async function saveFile() {
-        const data = []
-
+        const fileData = []
+        
         for(let i=0; i<editorsRef.current.length; i++) {
-            data.push({
+            fileData.push({
                 title: editorsRef.current[i].children[0].value,
                 paragraph: editorsRef.current[i].children[1].textContent
             })
         }
 
-        await Tauri.invoke('save_file', { data: [filepath, data] })
+        await Tauri.invoke('save_file', { data: [filepath, fileData] })
     }
 
     function newPage() {
@@ -98,7 +99,9 @@ export default function Home() {
                 <div>
                     <button onClick={openFile}>Open</button>
                     <button onClick={saveFile}>Save</button>
+                    <Dialog.Trigger>Export</Dialog.Trigger>
                     <Dialog.Trigger onClick={e => hideDialog(e, false)}>Settings</Dialog.Trigger>
+                    <Tauri.Version/>
                 </div>
                 <div data-tauri-drag-region id={styles.windowTitle}>
                     {filepath}
@@ -118,13 +121,14 @@ export default function Home() {
                             
             <Dialog.Root ref={dialogRootRef}>
                 <Dialog.Window ref={settingsWindow} className={dialog.dialogWindow}>
-                    <div className={dialog.dialogHeader}>
-                        <Dialog.Close className={dialog.dialogClose} onClick={e => hideDialog(e, true)}/>
-                        <div className={dialog.dialogTitle}>Settings</div>
-                    </div>
+                    <Dialog.Header title='Settings' onClick={e => hideDialog(e, true)}/>
                     <div className={dialog.dialogContent}>
-                        
+                        <label for='titlebar'>Titlebar color:</label>
+                        <input type='color' name='titlebar' value='#3b3b3b'/>
                     </div>
+                </Dialog.Window>
+                <Dialog.Window>
+
                 </Dialog.Window>
             </Dialog.Root>
         </>

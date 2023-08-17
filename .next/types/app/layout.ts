@@ -1,4 +1,4 @@
-// File: C:\Users\Dennis\Desktop\Repositories\nex\app\layout.jsx
+// File: C:\Users\Dennis\Desktop\Repositories\graphite\app\layout.jsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

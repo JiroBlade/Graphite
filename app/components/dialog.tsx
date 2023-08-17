@@ -33,6 +33,22 @@ const Window = React.forwardRef<HTMLDivElement, DialogWindowProps>((props: Dialo
     return <div {...listProps} ref={ref} hidden/>
 })
 
+interface DialogHeaderProps extends ElementProps {
+    title: string
+    onClick: any
+}
+
+const Header = React.forwardRef((props: DialogHeaderProps, ref) => {
+    const { title, onClick, ...listProps } = props
+
+    return(
+        <div {...listProps} className={dialog.dialogHeader}>
+            <button className={dialog.dialogClose} onClick={onClick}>&times;</button>
+            <div className={dialog.dialogTitle}>{title}</div>
+        </div>
+    )
+})
+
 interface DialogTriggerProps extends ElementProps {
     onClick: any
     value: string
@@ -44,14 +60,4 @@ const Trigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>((props: 
     return <button ref={ref} {...listProps} onClick={onClick} value={value}/>
 })
 
-interface DialogCloseProps extends ElementProps {
-    onClick: any
-}
-
-const Close = React.forwardRef<HTMLButtonElement, DialogCloseProps>((props: DialogCloseProps, ref) => {
-    const { onClick, ...listProps } = props
-
-    return <button {...listProps} onClick={onClick}>&times;</button>
-})
-
-export { Root, Window, Trigger, Close }
+export { Root, Window, Header, Trigger }
