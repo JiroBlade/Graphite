@@ -115,6 +115,10 @@ button.style_tabLink__naeIP {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 12px;
     color: white;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 button.style_tabLink__naeIP:hover {

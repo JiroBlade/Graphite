@@ -1,10 +1,11 @@
-import { CSSProperties, useCallback } from 'react'
+import { CSSProperties, ReactElement, useCallback } from 'react'
 import titlebar from '../css/titlebar.module.css'
 
 type InvokeArgs = Record<string, unknown>
 
 export interface ElementProps {
     style?: CSSProperties
+    children?: string | ReactElement[]
 }
 
 async function invoke(cmd: string, args?: InvokeArgs) {
