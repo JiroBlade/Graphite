@@ -6,7 +6,7 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "nex",
+    "productName": "graphite",
     "version": "0.1.0"
   },
   "tauri": {
@@ -34,7 +34,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.nex",
+      "identifier": "com.tauri.graphite",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

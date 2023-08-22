@@ -8,37 +8,19 @@ import * as Tauri from './components/tauri'
 import * as Tabs from './components/tabs';
 import * as Dialog from './components/dialog';
 import * as Settings from './components/settings'
+import { Editor } from './components/editor';
 
 export const TabContext = createContext()
 
 export default function Home() {
     const [data, setData] = useState({ tabList: [], editorList: []})
-    const [filepath, setFilepath] = useState(null)
-    const [defaultTab, setDefaultTab] = useState(null)
+    const [metadata, setMetadata] = useState({ filepath: null, defaultTab: null })
 
     const tabsTriggerRef = useRef([])
     const tabsContentRef = useRef([])
     const editorsRef = useRef([])
 
-    const Editor = forwardRef(({title, children, value}, ref) => {
-        function rename(e) {
-            
-            tabsTriggerRef.current[value].textContent = e.target.value
-
-            if(tabsTriggerRef.current[value].textContent == '') {
-                tabsTriggerRef.current[value].textContent = 'Untitled Page'
-            }
-        }
-
-        return(
-            <div ref={ref}>
-                <input defaultValue={title} className={styles.title} onInput={e => rename(e)}/>
-                <div contentEditable suppressContentEditableWarning>
-                    {children}
-                </div>
-            </div>
-        )
-    })
+    const dialogWindowsRef = useRef([])
 
     function openTab(e) {
         for(let i=0; i<tabsContentRef.current.length; i++) {
@@ -47,30 +29,38 @@ export default function Home() {
 
         for(let i=0; i<tabsTriggerRef.current.length; i++) {
             tabsTriggerRef.current[i].setAttribute('data-active', false)
+            tabsTriggerRef.current[i].disabled = false
         }
 
         tabsContentRef.current[e.target.value].hidden = false
         e.target.setAttribute('data-active', true)
+        e.target.disabled = true
     }
 
     async function openFile() {
         const file = await Tauri.invoke('open_file')
-        setFilepath(file[0])
-        setDefaultTab(file[1].defaultTab)
-        setData({
-            tabList: file[2].map((item, i) =>
-                <Tabs.Trigger key={i} className={styles.tabLink} name={item.title} ref={ed => tabsTriggerRef.current[i] = ed} value={i} active={false} onClick={e => openTab(e)}/>),
-            editorList: file[2].map((item, i) =>
-                <Tabs.Content key={i} className={styles.tabsContent} ref={ed => tabsContentRef.current[i] = ed}>
-                    <Editor title={item.title} value={i} ref={ed => editorsRef.current[i] = ed}>{item.paragraph}</Editor>
-                </Tabs.Content>)
+        
+        setMetadata({
+            filepath: file[0],
+            defaultTab: file[1].defaultTab
         })
+        
+        if(file[2].length > 0) {
+            setData({
+                tabList: file[2].map((item, i) =>
+                    <Tabs.Trigger key={i} className={styles.tabLink} ref={ed => tabsTriggerRef.current[i] = ed} value={i} active={false} onClick={e => openTab(e)}>{item.title}</Tabs.Trigger>),
+                editorList: file[2].map((item, i) =>
+                    <Tabs.Content key={i} className={styles.tabsContent} ref={ed => tabsContentRef.current[i] = ed}>
+                        <Editor title={item.title} value={i} ref={ed => editorsRef.current[i] = ed}>{item.paragraph}</Editor>
+                    </Tabs.Content>)
+            })
+        }
     }
 
     useEffect(() => {
-        if(filepath != null) {
-            tabsTriggerRef.current[defaultTab].setAttribute('data-active', true)
-            tabsContentRef.current[defaultTab].hidden = false
+        if(metadata.filepath != null) {
+            tabsTriggerRef.current[metadata.defaultTab].setAttribute('data-active', true)
+            tabsContentRef.current[metadata.defaultTab].hidden = false
         }
     })
 
@@ -100,7 +90,7 @@ export default function Home() {
     function newPage() {
         setData({
             tabList: data.tabList.concat(
-                <Tabs.Trigger key={data.tabList.length} name='Untitled Page' className={styles.tabLink} ref={ed => tabsTriggerRef.current[data.tabList.length] = ed} value={data.tabList.length} active={false} onClick={e => openTab(e)}/>),
+                <Tabs.Trigger key={data.tabList.length} className={styles.tabLink} ref={ed => tabsTriggerRef.current[data.tabList.length] = ed} value={data.tabList.length} active={false} onClick={e => openTab(e)} onCM={e => openContextMenu(e)}>Untitled Page</Tabs.Trigger>),
             editorList: data.editorList.concat(
                 <Tabs.Content key={data.editorList.length} className={styles.tabsContent} ref={ed => tabsContentRef.current[data.editorList.length] = ed}>
                     <Editor title={''} value={data.editorList.length} ref={ed => editorsRef.current[data.editorList.length] = ed}></Editor>
@@ -112,12 +102,12 @@ export default function Home() {
         e.preventDefault()
     }
 
-    const dialogRootRef = useRef()
-    const dialogWindowRef = useRef([])
-
-    function hideDialog(e, toggle) {
-        dialogRootRef.current.hidden = toggle
-        //settingsWindow.current.hidden = toggle
+    function toggleDialog(e) {
+        for(let i=0; i<dialogWindowsRef.current.length; i++) {
+            if(dialogWindowsRef.current[i].role == e.target.value) {
+                dialogWindowsRef.current[i].hidden = false
+            }
+        }
         
     }
 
@@ -127,17 +117,16 @@ export default function Home() {
                 <div>
                     <button onClick={openFile}>Open</button>
                     <button onClick={saveFile}>Save</button>
-                    <Dialog.Trigger>Export</Dialog.Trigger>
-                    <Dialog.Trigger onClick={e => hideDialog(e, false)}>Settings</Dialog.Trigger>
-                    <Tauri.Version/>
+                    <Dialog.Trigger value='export' onClick={e => toggleDialog(e)}>Export</Dialog.Trigger>
+                    <Dialog.Trigger value='settings' onClick={e=> toggleDialog(e)}>Settings</Dialog.Trigger>
                 </div>
                 <div data-tauri-drag-region id={styles.windowTitle}>
-                    {filepath}
+                    {metadata.filepath}
                 </div>
                 <Tauri.WindowControl/>
             </div>
 
-            <Tabs.Root style={{marginTop: '30px'}} value={defaultTab}>
+            <Tabs.Root style={{marginTop: '30px'}} value={metadata.defaultTab}>
                 <div id={styles.sidebar}>
                     <button onClick={newPage} id={styles.newPage}>New Page</button>
                     <Tabs.List id={styles.tabList}>
@@ -146,18 +135,25 @@ export default function Home() {
                 </div>
                 {data.editorList}
             </Tabs.Root>
-                            
-            <Dialog.Root ref={dialogRootRef}>
-                <Dialog.Window className={dialog.dialogWindow}>
+            
+            <Dialog.Window ref={ed => dialogWindowsRef.current[0] = ed} role='export'>
+                <Dialog.Header title='Export'/>
+            </Dialog.Window>
+            <Dialog.Window ref={ed => dialogWindowsRef.current[1] = ed} role='settings'>
+                <Dialog.Header title='Settings'/>
+            </Dialog.Window>
+            {/* <Dialog.Root ref={dialogRootRef}>
+                <Dialog.Window className={dialog.dialogWindow} role='export' ref={ed => dialogWindowRef.current[0] = ed}>
+                    <Dialog.Header title='Export'/>
+                </Dialog.Window>
+
+                <Dialog.Window className={dialog.dialogWindow} role='settings' ref={ed => dialogWindowRef.current[1] = ed}>
                     <Dialog.Header title='Settings' onClick={e => hideDialog(e, true)}/>
                     <div className={dialog.dialogContent}>
                         
                     </div>
                 </Dialog.Window>
-                <Dialog.Window>
-                    <Dialog.Header title='Export'/>
-                </Dialog.Window>
-            </Dialog.Root>
+            </Dialog.Root> */}
         </>
     )
 }

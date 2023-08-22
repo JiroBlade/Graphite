@@ -1,14 +1,15 @@
+'use client'
 import { CSSProperties, ReactElement, useCallback } from 'react'
 import titlebar from '../css/titlebar.module.css'
 
-type InvokeArgs = Record<string, unknown>
-
 export interface ElementProps {
     style?: CSSProperties
-    children?: string | ReactElement[]
+    role?: string
+    state?: string
+    children?: ReactElement[]
 }
 
-async function invoke(cmd: string, args?: InvokeArgs) {
+async function invoke(cmd: string, args?: Record<string, unknown>) {
     const { invoke } = await import('@tauri-apps/api')
     return invoke(cmd, args)
 }
@@ -38,14 +39,4 @@ function WindowControl() {
     )
 }
 
-function Version() {
-    const getVersion = useCallback(async() => {
-        const { getVersion } = await import('@tauri-apps/api/app')
-        const version = await getVersion()
-        alert('Version: ' + version)
-    }, [])
-
-    return <button onClick={getVersion}>Version</button>
-}
-
-export { invoke, WindowControl, Version }
+export { invoke, WindowControl }

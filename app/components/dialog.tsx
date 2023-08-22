@@ -1,36 +1,43 @@
-import * as React from "react"
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { ElementProps } from "./tauri";
 import dialog from '../css/dialog.module.css'
-import { ElementProps } from "./tauri"
 
-interface DialogRootProps extends ElementProps {
+interface DialogWindowProps extends ElementProps {
 
 }
 
-const Root = React.forwardRef<HTMLDivElement, DialogRootProps>((props: DialogRootProps, forwardedRef) => {
-    const { ...listProps } = props
-    const ref = React.useRef<HTMLDivElement>()
+const Window = forwardRef<HTMLDivElement>((props: DialogWindowProps, forwardedRef) => {
+    const { role, children, ...listProps } = props
+    const ref = useRef<HTMLDivElement>()
 
-    React.useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement)
+    useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement)
 
-    React.useEffect(() => {
+    useEffect(() => {
         document.addEventListener('keydown', e => {
-            if(e.key === 'Escape') {
+            if(e.key == 'Escape') {
                 ref.current.hidden = true
             }
         })
     })
 
-    return <div ref={ref} {...listProps} id={dialog.dialogRoot} hidden/>
+    return(
+        <div ref={ref} role={role} className={dialog.dialogRoot} hidden>
+            <div className={dialog.dialogWindow}>
+                {children}
+            </div>
+        </div>
+    )
 })
 
-interface DialogWindowProps extends ElementProps {
-    
+interface TabsTriggerProps extends ElementProps {
+    value: string
+    onClick: any
 }
 
-const Window = React.forwardRef<HTMLDivElement, DialogWindowProps>((props: DialogWindowProps, ref) => {
-    const { ...listProps } = props
+const Trigger = forwardRef<HTMLButtonElement>((props: TabsTriggerProps, ref) => {
+    const { value, onClick, ...listProps } = props
 
-    return <div {...listProps} ref={ref} hidden/>
+    return <button ref={ref} value={value} onClick={onClick} {...listProps}></button>
 })
 
 interface DialogHeaderProps extends ElementProps {
@@ -38,26 +45,15 @@ interface DialogHeaderProps extends ElementProps {
     onClick: any
 }
 
-const Header = React.forwardRef((props: DialogHeaderProps, ref) => {
+const Header = forwardRef<HTMLDivElement>((props: DialogHeaderProps, ref) => {
     const { title, onClick, ...listProps } = props
 
     return(
-        <div {...listProps} className={dialog.dialogHeader}>
+        <div ref={ref}>
             <button className={dialog.dialogClose} onClick={onClick}>&times;</button>
             <div className={dialog.dialogTitle}>{title}</div>
         </div>
     )
 })
 
-interface DialogTriggerProps extends ElementProps {
-    onClick: any
-    value: string
-}
-
-const Trigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>((props: DialogTriggerProps, ref) => {
-    const { onClick, value, ...listProps } = props
-
-    return <button ref={ref} {...listProps} onClick={onClick} value={value}/>
-})
-
-export { Root, Window, Header, Trigger }
+export { Window, Trigger, Header }

@@ -39,11 +39,11 @@ interface TabsTriggerProps extends TabsProps {
 }
 
 const Trigger = forwardRef<HTMLButtonElement, TabsTriggerProps>((props: TabsTriggerProps, ref) => {
-    const { active, value, onClick, name, onCM, ...listProps } = props
+    const { active, value, onClick, children, onCM, ...listProps } = props
 
     return(
         <button {...listProps} ref={ref} value={value} data-active={active} onClick={onClick} onContextMenu={onCM}>
-            <span>{name}</span>
+            <span>{children}</span>
         </button>)
 })
 
